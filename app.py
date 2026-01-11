@@ -4,6 +4,25 @@ import requests
 import os
 from dotenv import load_dotenv
 
+
+def download_file(url, filename):
+    if not os.path.exists(filename):
+        print(f"Downloading {filename}...")
+        r = requests.get(url)
+        with open(filename, "wb") as f:
+            f.write(r.content)
+
+# Download models from Google Drive
+download_file(
+    "https://drive.google.com/uc?export=download&id=1NRaO1cm_SFCeJWfKc9liD5cGo-bEaW2v",
+    "movies.pkl"
+)
+
+download_file(
+    "https://drive.google.com/uc?export=download&id=1wxtpMZ0Ywk3Mnciya8CHQWZnQSfnIeYU",
+    "similarity.pkl"
+)
+
 load_dotenv()
 API_KEY = os.getenv("TMDB_API_KEY")
 # Load data
