@@ -5,18 +5,19 @@ import os
 
 
 API_KEY = os.getenv("TMDB_API_KEY")
-def download_file(file_id, filename):
-    if os.path.exists(filename):
-        return
+import requests
+import os
 
-    print(f"Downloading {filename}...")
+def download_file_from_google_drive(file_id, destination):
+    if os.path.exists(destination):
+        return
 
     URL = "https://drive.google.com/uc?export=download"
     session = requests.Session()
 
     response = session.get(URL, params={'id': file_id}, stream=True)
-    token = None
 
+    token = None
     for key, value in response.cookies.items():
         if key.startswith('download_warning'):
             token = value
@@ -25,14 +26,23 @@ def download_file(file_id, filename):
         params = {'id': file_id, 'confirm': token}
         response = session.get(URL, params=params, stream=True)
 
-    with open(filename, "wb") as f:
+    with open(destination, "wb") as f:
         for chunk in response.iter_content(32768):
             if chunk:
                 f.write(chunk)
 
+
 # Download models from Google Drive
-download_file("1NRaO1cm_SFCeJWfKc9liD5cGo-bEaW2v", "movies.pkl")
-download_file("1wxtpMZ0Ywk3Mnciya8CHQWZnQSfnIeYU", "similarity.pkl")
+download_file_from_google_drive(
+    "1NRaO1cm_SFCeJWfKc9liD5cGo-bEaW2v",
+    "movies.pkl"
+)
+
+download_file_from_google_drive(
+    "1wxtpMZ0Ywk3Mnciya8CHQWZnQSfnIeYU",
+    "similarity.pkl"
+)
+
 
 
 
