@@ -2,9 +2,9 @@ import streamlit as st
 import pickle
 import requests
 import os
-from dotenv import load_dotenv
 
 
+API_KEY = os.getenv("TMDB_API_KEY")
 def download_file(url, filename):
     if not os.path.exists(filename):
         print(f"Downloading {filename}...")
@@ -23,8 +23,8 @@ download_file(
     "similarity.pkl"
 )
 
-load_dotenv()
-API_KEY = os.getenv("TMDB_API_KEY")
+
+
 # Load data
 movies = pickle.load(open('movies.pkl', 'rb'))
 similarity = pickle.load(open('similarity.pkl', 'rb'))
